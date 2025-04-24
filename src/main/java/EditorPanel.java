@@ -149,6 +149,8 @@ public class EditorPanel extends JPanel {
         kanten.addAll(uniqueKanten);
     }
 
+
+
     private void showContextMenu(MouseEvent e, Feld feld) {
         JPopupMenu menu = new JPopupMenu();
         String[] options = {"Clear", "Krone", "Sperrstein", "Spawn"};
@@ -167,5 +169,19 @@ public class EditorPanel extends JPanel {
             menu.add(item);
         }
         menu.show(this, e.getX(), e.getY());
+    }
+    public String exportToString(){return XMLHandler.exportToString(felder, kanten); }
+    public void loadFromXMLString(String xmlString) {
+        XMLHandler.loadFromString(xmlString, felder, kanten);
+        repaint();
+    }
+    public int getSpielerAnzahl() {
+        int spielerAnzahl = 0;
+        for (Feld feld : felder) {
+            if (feld.data.equals("Spawn")) {
+                spielerAnzahl++;
+            }
+        }
+        return spielerAnzahl;
     }
 }
