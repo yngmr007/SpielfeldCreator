@@ -51,25 +51,28 @@ public class EditorFrame extends JFrame {
         return item;
     }
     private void showUploadDialog() {
-        JDialog loginDialog = new JDialog(this, "Upload", true);
-        loginDialog.setLayout(new GridLayout(3, 2));
+        JDialog uploadDialog = new JDialog(this, "Upload", true);
+        uploadDialog.setLayout(new GridLayout(3, 2));
 
         JTextField gameNameField = new JTextField(); //todo: read and input game name when loaded from server
 
-        loginDialog.add(new JLabel("Name of the game:"));
-        loginDialog.add(gameNameField);
+        uploadDialog.add(new JLabel("Name of the game:"));
 
-        JButton loginButton = new JButton("Upload");
-        loginButton.addActionListener(e -> {
+        uploadDialog.add(gameNameField);
+
+        JButton uploadButton = new JButton("Upload");
+        uploadDialog.getRootPane().setDefaultButton(uploadButton);
+
+        uploadButton.addActionListener(e -> {
             saveToServer(gameNameField.getText());
-            loginDialog.dispose();
+            uploadDialog.dispose();
         });
 
-        loginDialog.add(new JLabel());
-        loginDialog.add(loginButton);
-        loginDialog.pack();
-        loginDialog.setLocationRelativeTo(this);
-        loginDialog.setVisible(true);
+        uploadDialog.add(new JLabel());
+        uploadDialog.add(uploadButton);
+        uploadDialog.pack();
+        uploadDialog.setLocationRelativeTo(this);
+        uploadDialog.setVisible(true);
     }
     
     private void showLoginDialog() {
@@ -83,9 +86,16 @@ public class EditorFrame extends JFrame {
         loginDialog.add(usernameField);
         loginDialog.add(new JLabel("Passwort:"));
         loginDialog.add(passwordField);
+
+
         
         JButton loginButton = new JButton("Login");
+        loginDialog.getRootPane().setDefaultButton(loginButton);
         loginButton.addActionListener(e -> {
+            if(usernameField.getText().isEmpty() || new String(passwordField.getPassword()).isEmpty()) {
+                showToast("Bitte alle Felder ausfüllen");
+                return;
+            }
             try {
                 String token = AuthClient.login(usernameField.getText(), new String(passwordField.getPassword()));
                 TokenStorage.saveToken(token);
