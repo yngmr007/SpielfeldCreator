@@ -22,6 +22,8 @@ public class XMLHandler {
         int walkingIdKrone = 0;
         int walkingIdSperrstein = 0;
         int walkingIdSpawns = 0;
+        int ymin = Integer.MAX_VALUE;
+        int xmin = Integer.MAX_VALUE;
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -38,6 +40,8 @@ public class XMLHandler {
             feldElem.setAttribute("id", String.valueOf(walkingIdFields++));
             feldElem.setAttribute("posX", String.valueOf(f.posX));
             feldElem.setAttribute("posY", String.valueOf(f.posY));
+            ymin = Math.min(ymin, f.posY);
+            xmin = Math.min(xmin, f.posX);
 
             String data="";
             if (f.data != null){
@@ -55,12 +59,13 @@ public class XMLHandler {
                     }
                 }
             }
-
             feldElem.setAttribute("data", data);
             felderElem.appendChild(feldElem);
         }
+
         root.appendChild(spawnsElem);
         root.appendChild(felderElem);
+
 
         Element kantenElem = doc.createElement("kanten");
         for (Kante k : kanten) {

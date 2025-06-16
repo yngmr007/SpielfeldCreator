@@ -39,7 +39,7 @@ public class ApiClient {
                     )
                     .build()) {
 
-                HttpPost post = new HttpPost("https://localhost:8443/api/xml/uploadgame");
+                HttpPost post = new HttpPost("https://" + TokenStorage.getHostname() + ":8443/api/u/newtemplate");
                 post.setHeader("Cookie", "JSESSIONID=" + token);
 
                 MultipartEntityBuilder builder = MultipartEntityBuilder.create();

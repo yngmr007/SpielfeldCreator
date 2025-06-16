@@ -77,11 +77,14 @@ public class EditorFrame extends JFrame {
     
     private void showLoginDialog() {
         JDialog loginDialog = new JDialog(this, "Login", true);
-        loginDialog.setLayout(new GridLayout(3, 2));
-        
+        loginDialog.setLayout(new GridLayout(4, 2));
+
+        JTextField hostnameField = new JTextField();
         JTextField usernameField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
-        
+
+        loginDialog.add(new JLabel("Hostadresse:"));
+        loginDialog.add(hostnameField);
         loginDialog.add(new JLabel("Benutzername:"));
         loginDialog.add(usernameField);
         loginDialog.add(new JLabel("Passwort:"));
@@ -92,13 +95,13 @@ public class EditorFrame extends JFrame {
         JButton loginButton = new JButton("Login");
         loginDialog.getRootPane().setDefaultButton(loginButton);
         loginButton.addActionListener(e -> {
-            if(usernameField.getText().isEmpty() || new String(passwordField.getPassword()).isEmpty()) {
+            if(usernameField.getText().isEmpty() || new String(passwordField.getPassword()).isEmpty() || hostnameField.getText().isEmpty()) {
                 showToast("Bitte alle Felder ausfüllen");
                 return;
             }
             try {
                 String token = AuthClient.login(usernameField.getText(), new String(passwordField.getPassword()));
-                TokenStorage.saveToken(token);
+                TokenStorage.saveToken(token, hostnameField.getText());
                 showToast("Erfolgreich eingeloggt");
                 loginDialog.dispose();
             } catch (IOException ex) {
